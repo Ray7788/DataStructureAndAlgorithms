@@ -1,19 +1,32 @@
-Problem set1
-
-Input: An array A of distinct integers in ascending order. The number of integers in A is n   
-Output: one position i in the list, such that A[i]=i, if any exists. Otherwise "No"
-
 Algorithm fixedPoint(A,n)
+Sol1
+    flag <-0
+    for i -> 0 to n-1 do
+        if A[i] = i then
+            flag <= 1
+            break
 
-flag <-0
-for i -> 0 to n-1 do
-    if A[i] = i then
-        flag <= 1
-        break
+    if flag = 1 then
+        return i
+    else 
+        return No
 
-if flag = 1 then
-    return i
-else 
+#   First, set a variable flag to note that whether it has found the fixed point or not, we set it 0 first.
+# Then, use a for loop to check the whole array whether i equals to A[i], if it equals, then set flag to be 1,
+# and break the loop, if not, continue the loop until it checks all the array. So in the end, check the flag
+# variable, if it is 1 means that it has found fixed point, so return the index i, if it is 0, then means it did not found the fixed
+# point, so the Output will be No.Problem set1
+
+Sol2
+Algorithm fixedPoint_BinarySearch(A,n)
+    min <- 0
+    max <- n-1
+    while min <= max do
+        mid <- (min + max)/2
+        if A[mid] > mid then
+            max <- mid -1
+        else if A[mid] < mid then
+            min <- mid +1
+        else return mid
     return No
 
-#
