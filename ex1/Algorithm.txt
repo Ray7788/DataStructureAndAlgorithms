@@ -1,0 +1,19 @@
+Problem set1
+
+Input: An array A of distinct integers in ascending order. The number of integers in A is n   
+Output: one position i in the list, such that A[i]=i, if any exists. Otherwise "No"
+
+Algorithm fixedPoint(A,n)
+
+flag <-0
+for i -> 0 to n-1 do
+    if A[i] = i then
+        flag <= 1
+        break
+
+if flag = 1 then
+    return i
+else 
+    return No
+
+#
