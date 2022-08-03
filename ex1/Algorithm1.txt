@@ -11,11 +11,13 @@ Sol1
     else 
         return No
 
-#   First, set a variable flag to note that whether it has found the fixed point or not, we set it 0 first.
+# First, set a variable flag to note that whether it has found the fixed point or not, we set it 0 first.
 # Then, use a for loop to check the whole array whether i equals to A[i], if it equals, then set flag to be 1,
 # and break the loop, if not, continue the loop until it checks all the array. So in the end, check the flag
 # variable, if it is 1 means that it has found fixed point, so return the index i, if it is 0, then means it did not found the fixed
 # point, so the Output will be No.Problem set1
+
+# Number of operations uses(worst case): 1+2(n-1)+1+1+1 = 2n+2
 
 Sol2
 Algorithm fixedPoint_BinarySearch(A,n)
@@ -29,4 +31,9 @@ Algorithm fixedPoint_BinarySearch(A,n)
             min <- mid +1
         else return mid
     return No
+
+# Complexity: we start by searching at the middle element in the array and if it isn't the one we are looking for then we cut again the array in half, looking whether on the left or on the right. 
+# We keep doing that until we find the required index or until the right index is bigger then the left one. So we are dividing by two with each check we make, the complexity being O(log n)
+
+# Number of operations uses(worst case): 2+8log2(n)+1 = 10log2(n)+3
 
