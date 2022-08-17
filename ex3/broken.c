@@ -14,65 +14,68 @@ typedef struct pair {
 // temp a version of work.first that is all
 // lowercase and then storing in work.second
 // a version where the first character is
-// made uppercase
-void process(pair* work)
+// made uppercase 
+void process(pair work)
 {
-  //Allocate a new space in memory to store a lower case version of the
-  //input string and copy the string into it
-  char* temp = (char*)(malloc(32 * sizeof(char)));
-  strcpy(temp,work->first);
-
-  for(int i=0;i<=strlen(work->first)+1;i++){
-    char c = work->first[i];
+  char* temp = work.first;
+  // char *temp = (char*)malloc(strlen(work.first)+1);
+  // if(temp == NULL)
+  // {
+  //   exit(-1);
+  // }
+  for(int i=0;i<=strlen(work.first)+1;i++){
+    char c = work.first[i];
     if(islower(c)){
-      temp[i] = c;
+      temp[i] = c; 
     }
-    else if(isupper(c)){
+    if(isupper(c)){
       temp[i] = tolower(c);
     }
-    else
-    {
-      temp[i] = c;
-    }
   }
+  // int i;
+  // for(i=0;i<=strlen(work.first);i++){
+  //   char c = work.first[i];
+  //   if(isupper(c)){
+  //     temp[i] = tolower(c);
+  //   }
+  //   else{
+  //     temp[i] = c;                  
+  //   }
+  // }
 
-  //Allocate a new space in memory to store the altered word and start by
-  //copying the lowercase version of the input string
-  work->second = (char*)(malloc(32 * sizeof(char)));
-  strcpy(work->second,temp);
-  char* ptr = work->second;
-
-  //Identify the space character
-  int last_space = 0;
-
-  //Convert the first letter to upper case
-  *ptr = toupper(*ptr);
-
-  //For every space in the string, convert the next character to uppercase
-  while(*ptr++){
+  //work.second = (char*)malloc(sizeof(work.first));
+  strcpy(work.second,temp);
+  int last_space = 1;
+  char* ptr = work.second;
+  while(*ptr){
     if(last_space){
       *ptr = toupper(*ptr);
     }
-    last_space = *ptr == ((char) ' ');
+    last_space = *ptr == ((char) ' '); 
+    ptr++;
   }
-
-  //Free the allocated memory
-  free(temp);
+  //free(temp);
 }
 
 // Takes a single string and writes the result to stdout
 int main(int argc, char **argv)
 {
-  //Create a pair and assign the pointer of first to the string
+  if(argc != 2)
+  {
+    return -1;
+  }
   pair work;
   work.first = argv[1];
+  work.second = (char*)malloc(strlen(work.first)+1);
+  if(work.second == NULL)
+  {
+    return -1;
+  }
 
-  //Pass the value of work by reference
-  process(&work);
-
-  //Print the result
+  process(work);
+  
   printf("%s becomes %s\n",work.first,work.second);
-
-  //Free the allocated memory
   free(work.second);
+  
+  return 0;
 }
