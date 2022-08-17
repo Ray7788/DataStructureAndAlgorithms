@@ -1,0 +1,40 @@
+Firstly, compile and run broken.c , 
+we get a segment fault.
+And then we use gdb backtrace 
+and get to know that the problem was 'strcpy'.   # in __strcpy_sse2_unaligned () from /lib64/libc.so.6
+
+Problem is: use of work.second without allocation. In other words, we did not initialize pointer char* work.second 
+We need to give work.second some space to use
+
+Then we got: "hello world becomes (null)".
+
+So we followed the instruction to use gdb to see the results. 
+There are several issues:
+
+1. input being converted to lower case when displayed.
+It is caused by the pointer "temp" pointing to the same place as pointer "first" 
+which means both pointers( temp and work.first) points to the same memory space.
+when we change temp, we also change work.first, this makes the final
+output of work.first equals to temp, which is all lowercase characters.
+So any change will effect what we
+store as an input.
+
+Solution:
+we need to allocate another part of memory that temp will point to.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+2. the output shows "NULL".
+
+The function is being passed by value rather than reference.
+
+To fix this we can pass the parameters by reference so that the changes take effect outside the function.
+
+
+Later I found another problem:
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+3. "hELLO wORLD becomes hEllo World" It capitalises E, not h.
+Programme was skipping out first letter due to incrementing to next character before the iteration of loop
+we can optimise the for loop.
+
+This involved changing the checked value of last space to 0. The pointer is initially set to upper case (for the first
+letter) and then set to upper case again everytime we see a space.
