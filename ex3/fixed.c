@@ -17,8 +17,9 @@ typedef struct pair {
 // made uppercase
 void process(pair* work)
 {
-  //Allocate a new space in memory to store a lower case version of the
+  //***Allocate a new space in memory to store a lower case version of the
   //input string and copy the string into it
+
   char* temp = (char*)(malloc(32 * sizeof(char)));
   strcpy(temp,work->first);
 
@@ -36,7 +37,7 @@ void process(pair* work)
     }
   }
 
-  //Allocate a new space in memory to store the altered word and start by
+  //***Allocate a new space in memory to store the altered word and start by
   //copying the lowercase version of the input string
   work->second = (char*)(malloc(32 * sizeof(char)));
   strcpy(work->second,temp);
