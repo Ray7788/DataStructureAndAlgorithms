@@ -44,6 +44,10 @@ int main(int argc, char **argv)
         printf("%d: %s is %d\n", j, people[j]->name, people[j]->age);
     }
 
-
+    // StepC: Free the allocated memory
+    for(int k = 0; k < HOW_MANY; k++)
+    {
+        free(people[k]);
+    }
   return 0;
 }
