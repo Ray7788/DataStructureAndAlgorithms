@@ -1,5 +1,6 @@
 #include "matrix.h"
-
+#include<stdio.h>
+#include<stdlib.h>
 #include <errno.h> /* for ENOSYS */
 
 int matrix_allocate(matrix_t *m, int rows, int columns) {
@@ -7,108 +8,134 @@ int matrix_allocate(matrix_t *m, int rows, int columns) {
 
     m->rows = rows;
     m->columns = columns;
-    m->matrix_t = (float **)malloc(sizeof(float *)*m->rows);
+    // allocate memory for its content
+    m->content = (int**)malloc(rows * sizeof(int*));
+
+    if(m->content == NULL){return -1;}
 
     for(int i = 0; i <m->rows; i++){
-        m->matrix_t[i] = (float *)malloc(sizeof(float)*m->columns);
+        m->content[i] = (int*)malloc(sizeof(int) * m->columns);
     }  
 
-    return m;
+    return 0;
 }
 
 void matrix_free(matrix_t *m) {
-    for(int i = 0; i < m->row; i++){
-        free(m->matrix_t[i]);
-        m->matrix_t[i] = NULL;
+    for(int i = 0; i < m->rows; i++){
+        free(m->content[i]);
+        m->content[i] = NULL;
     }
 
-    free(m->matrix_t);
-    m->matrix_t = NULL;
-}
-
-void matrix_init_zeros(matrix_t *m) {
-    for(int i=0; i<m->rows; i++){
-        for(int j=0; j<m->columns; j++){
-            m->matrix_t[i][j] = 0;
-        }
-    }
-} 
-
-int matrix_init_identity(matrix_t *m){
-    if(m->columns != m->rows){
-        exit
-    }
-
-    int j=0;
-    for(int i=0; i<m->rows; i++){
-        m->matrix_t[i][j++] = 1;
-    }
-
-    return m;
+    free(m->content);
+    m->content = NULL;
 }
 
 void matrix_init_rand(matrix_t *m) {
     for(int i=0; i<m->rows; i++){
         for(int j=0; j<m->columns; j++){
-            // Take values between -100 and 100
-            int x = rand()%200-99
+            // Take values between -100 and 100   m--n rand()%200-99
+            int x = rand()%(100-(-100)+1)+(-100);
 
-            m->matrix_t[i][j] = x;
+            m->content[i][j] = x;
         }
+    }
+}
+
+void matrix_init_zeros(matrix_t *m) {
+    for(int i=0; i<m->rows; i++){
+        for(int j=0; j<m->columns; j++){
+            m->content[i][j] = 0;
+        }
+    }
+} 
+
+int matrix_init_identity(matrix_t *m){
+    if(m->columns == m->rows){
+        int j=0;
+        for(int i=0; i<m->rows; i++){
+            m->content[i][j++] = 1;
+        }
+
+        return 0;
+    }else{
+        return -1;
     }
 }
 
 int matrix_equal(matrix_t *m1, matrix_t *m2) {
-    if(m1.rows != m2.rows || m1.columns != m2.columns){
+    if(m1->rows != m2->rows || m1->columns != m2->columns){
         return 0;
-    }else{
-        return 1;
+    }
+
+    if(m1->rows == m2->rows && m1->columns == m2->columns){
+        for(int i=0; i<m1->rows; i++){
+            for(int j=0; j<m1->columns; j++){
+                if (m1->content[i][j] != m2->content[i][j]){
+                    return 0;
+                    
+                }
+            }
+        }
+        
+        return 1;;
     }
 }
 
 int matrix_sum(matrix_t *m1, matrix_t *m2, matrix_t *result) {
-    if(matrix_equal == 0){}
-
-    for(int i = 0; i < result.rows; i++){
-        for(int j = 0; j < result.columns; j++){
-            result.matrix_t[i][j] += m1.matrix[i][j] + m2.matrix[i][j]; 
-        }
+    if(m1->rows != m2->rows && m1->columns != m2->columns){
+        return -1;
     }
-  
-    return result;
+
+    matrix_allocate(result,m1->rows, m1->columns);
+    if(m1->rows == m2->rows && m1->columns == m2->columns){
+        for(int i = 0; i < result->rows; i++){
+            for(int j = 0; j < result->columns; j++){
+                result->content[i][j] += m1->content[i][j] + m2->content[i][j]; 
+            }
+        }
+
+        return 0;
+    }
 }
 
 int matrix_scalar_product(matrix_t *m, int scalar, matrix_t *result) {
-    for(int i = 0; i < result.rows; i++){
-        for(int j = 0; j < result.columns; j++){    
-            result.matrix_t[i][j] = m1.matrix[i*scalar][j*scalar];
+    matrix_allocate(result,m->rows, m->columns);
+
+    for(int i = 0; i < result->rows; i++){
+        for(int j = 0; j < result->columns; j++){    
+            result->content[i][j] = m->content[i][j] *scalar ;
         }
     }
-    return result;
+    return 0;
 }
 
 int matrix_transposition(matrix_t *m, matrix_t *result) {
+    matrix_allocate(result,m->columns, m->rows);
+
     for(int i = 0; i < m->rows; i++){
         for(int j = 0; j < m->columns; j++){
-            m->matrix_t[i][j] = result.matrix_t[j][i];
+            result->content[j][i] = m->content[i][j];
         }
     }
+    return 0;
 }
 
 int matrix_product(matrix_t *m1, matrix_t *m2, matrix_t *result) {
     if(m1->columns != m2->rows){
-        exit
+        return -1;
     }
 
-     for(int i = 0; i < result.rows; i++){
-        for(int j = 0; j < result.columns; j++){
-            for(int k = 0; k < m1.columns; k++){
-                result.matrix_t[i][j] += m1.matrix_t[i][k] * m2.matrix_t[k][j];
+    matrix_allocate(result, m1->rows, m2->columns);
+
+        for(int i = 0; i < result->rows; i++){
+            for(int j = 0; j < result->columns; j++){
+                for(int k = 0; k < m1->columns; k++){
+                    result->content[i][j] += m1->content[i][k] * m2->content[k][j];
+                }
             }
         }
-    }
+        return 0;
 
-    return result;
 }
 
 int matrix_dump_file(matrix_t *m, char *output_file) {
@@ -121,11 +148,13 @@ int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
     return -ENOSYS;
 }
 
+// displaying a matrix on the standard output
 void print_matrix(matrix_t m){
     for(int i=0; i<m.rows; i++){
         for(int j=0; j<m.columns; j++){
-            printf("%d ",m.matrix_t[i][j]);
+            printf("%d ",m.content[i][j]);
         }
         printf("\n");
     }
 }
+
