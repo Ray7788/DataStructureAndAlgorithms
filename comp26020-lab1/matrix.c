@@ -4,7 +4,7 @@
 #include <errno.h> /* for ENOSYS */
 
 int matrix_allocate(matrix_t *m, int rows, int columns) {
-    int size = rows * columns;
+    // int size = rows * columns;
 
     m->rows = rows;
     m->columns = columns;
@@ -144,7 +144,10 @@ int matrix_dump_file(matrix_t *m, char *output_file) {
 }
 
 int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
-    /* implement the function here ... */
+    FILE *fp = NULL;
+    fp = fopen(input_file,"r");    
+    fgets("");
+
     return -ENOSYS;
 }
 
