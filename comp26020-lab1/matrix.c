@@ -4,8 +4,6 @@
 #include <errno.h> /* for ENOSYS */
 
 int matrix_allocate(matrix_t *m, int rows, int columns) {
-    // int size = rows * columns;
-
     m->rows = rows;
     m->columns = columns;
     // allocate memory for its content
@@ -121,32 +119,63 @@ int matrix_transposition(matrix_t *m, matrix_t *result) {
 }
 
 int matrix_product(matrix_t *m1, matrix_t *m2, matrix_t *result) {
-    if(m1->columns != m2->rows){
-        return -1;
-    }
-
-    matrix_allocate(result, m1->rows, m2->columns);
+    if(m1->columns == m2->rows){
+        matrix_allocate(result, m1->rows, m2->columns);
 
         for(int i = 0; i < result->rows; i++){
             for(int j = 0; j < result->columns; j++){
+                int t = 0;
                 for(int k = 0; k < m1->columns; k++){
-                    result->content[i][j] += m1->content[i][k] * m2->content[k][j];
+                    t += (m1->content[i][k] * m2->content[k][j]);
                 }
+                result->content[i][j] = t;
             }
         }
-        return 0;
 
+        return 0;
+    }
+
+    if(m2->columns == m1->rows){
+        matrix_allocate(result, m2->rows, m1->columns);
+
+        for(int i = 0; i < result->rows; i++){
+            for(int j = 0; j < result->columns; j++){
+                int t = 0;
+                for(int k = 0; k < m2->columns; k++){
+                    t += (m2->content[i][k] * m1->content[k][j]);
+                }
+                result->content[i][j] = t;
+            }
+        }
+
+        return 0;
+    }
+
+    return -1;
 }
 
 int matrix_dump_file(matrix_t *m, char *output_file) {
-    /* implement the function here ... */
-    return -ENOSYS;
+    FILE *fp = NULL;
+    fp = fopen(output_file,"w");
+
+    if(fp == NULL){
+        return -1;
+    }
+
+    for(int i = 0; i < m->rows; i++){
+        for(int j = 0; j < m->columns; j++){
+            fprintf(fp, " %d", m->content[i][j]);        
+        }
+        fputs("\n", fp);
+    }
+    
+    return 0;
 }
 
 int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
-    FILE *fp = NULL;
-    fp = fopen(input_file,"r");    
-    fgets("");
+    // FILE *fp = NULL;
+    // fp = fopen(input_file,"r");    
+    // fgets("");
 
     return -ENOSYS;
 }
