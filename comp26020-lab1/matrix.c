@@ -158,7 +158,7 @@ int matrix_dump_file(matrix_t *m, char *output_file) {
         }
         fputs("\n", fp);
     }
-    
+
     fclose(fp);
     return 0;
 }
@@ -222,16 +222,16 @@ int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
             numColBuffer = 0;
         }
 
-       lastChar = statusSpace;
+       lastChar = statusSpace;  // reset pointers to the same status 
     }
 
     matrix_allocate(m,numRow,numCol);
-    rewind(fp);
-    int x;
+    rewind(fp); // reset the pointer
+    int tempValue;
     for(int i = 0; i < m->rows; i++){
         for(int j = 0; j < m->columns; j++){
-            fscanf(fp,"%d", &x);
-            m->content[i][j] = x;
+            fscanf(fp,"%d", &tempValue);
+            m->content[i][j] = tempValue;
         }
     }
 
