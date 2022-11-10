@@ -4,6 +4,11 @@
 #include <errno.h> /* for ENOSYS */
 
 int matrix_allocate(matrix_t *m, int rows, int columns) {
+    // can't allocate a matrix with negative dimensions
+    if(rows < 1 || columns < 1){
+        return -1;
+    }
+
     m->rows = rows;
     m->columns = columns;
     // allocate memory for its content
@@ -88,7 +93,7 @@ int matrix_sum(matrix_t *m1, matrix_t *m2, matrix_t *result) {
     if(m1->rows == m2->rows && m1->columns == m2->columns){
         for(int i = 0; i < result->rows; i++){
             for(int j = 0; j < result->columns; j++){
-                result->content[i][j] += m1->content[i][j] + m2->content[i][j]; 
+                result->content[i][j] = m1->content[i][j] + m2->content[i][j]; 
             }
         }
 
@@ -154,6 +159,7 @@ int matrix_dump_file(matrix_t *m, char *output_file) {
         fputs("\n", fp);
     }
     
+    fclose(fp);
     return 0;
 }
 
