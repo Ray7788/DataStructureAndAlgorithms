@@ -92,8 +92,9 @@ int matrix_sum(matrix_t *m1, matrix_t *m2, matrix_t *result) {
             }
         }
 
-        return 0;
+        
     }
+    return 0;
 }
 
 int matrix_scalar_product(matrix_t *m, int scalar, matrix_t *result) {
@@ -229,4 +230,5 @@ int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
     }
 
     fclose(fp);
+    return 0;   
 }
