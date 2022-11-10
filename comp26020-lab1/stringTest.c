@@ -6,10 +6,13 @@ int main(void)
     FILE *fp = NULL;
     int ch;
     int emptyLine = 0;
-    int numRow = 0; /*calculate number of rows */
+    int numRow = 0; /*calculate number of rows exactly */
     int numCol = 0; /*calculate number of cols */
-    int statusSpace = 2;    
-    int statusLine = 2;
+    int numColBuffer = 0;
+
+    int statusSpace = 1; /*check if pointer changes betweeen number and whitespace*/   
+    int lc = 1;
+    int statusLine = 1; /*check if pointer meets line termination*/
 
     fp = fopen("test.txt","r");    
 
@@ -20,19 +23,18 @@ int main(void)
     while ((ch = fgetc(fp)) != EOF){
         int last;
         if (ch == '\n' && last == '\n'){
-            emptyLine++;
+            emptyLine = 0;
         }
         
         // at the end of each line
         if ((ch == '\n')){
-            numRow++;
+            numRow++;   // number of rows increases
             statusLine = 1;
-            statusSpace = 1;
         }else{
             statusLine = 0;
         }
         
-        // test if the char ends with space
+        // check if pointer meets with space
         if(ch == ' '){
             statusSpace = 1;
         }else{
@@ -40,18 +42,35 @@ int main(void)
         }
 
         // calculate rech row has how many elements
-        if(statusSpace == 1){    
-            if(statusLine = 0){
-                numCol++;
-            }else{
+        if(statusLine == 0){ 
+            if(statusSpace != lc){   
+                if(statusSpace = 0){
+                    numColBuffer++;
+                }
+            }
+        }else{
+            statusSpace = 1;
 
+            if(emptyLine  == 1){    // if meets empty row, 
+                numRow--;
             }
 
+            if(numRow == 1){    //  trye value of columns
+                numCol = numColBuffer;
+            }
+
+            if(numCol != numColBuffer){    // Illegal matrix
+                return -1;
+            }
+
+            numColBuffer = 0;
         }
 
-       last = ch;
+       lc = statusSpace;
 
     }
      
-    numRow -= emptyLine;
+    printf(" rows %d", numRow);
+    printf(" columns %d", numCol);
+    fclose(fp);
 }
