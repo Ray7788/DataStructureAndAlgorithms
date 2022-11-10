@@ -177,7 +177,7 @@ int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
 
     while ((ch = fgetc(fp)) != EOF){
         // at the end of each line
-        if ((ch == '\n')){
+        if (ch == '\n'){
             numRow++;   // number of rows increases
             statusLine = 1;
         }else{
