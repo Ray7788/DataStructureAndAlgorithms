@@ -48,6 +48,7 @@ void matrix_init_zeros(matrix_t *m) {
 } 
 
 int matrix_init_identity(matrix_t *m){
+    matrix_init_zeros(m);
     if(m->columns == m->rows){
         int j=0;
         for(int i=0; i<m->rows; i++){
@@ -73,10 +74,9 @@ int matrix_equal(matrix_t *m1, matrix_t *m2) {
                     
                 }
             }
-        }
-        
-        return 1;;
+        } 
     }
+    return 1;
 }
 
 int matrix_sum(matrix_t *m1, matrix_t *m2, matrix_t *result) {
@@ -135,22 +135,6 @@ int matrix_product(matrix_t *m1, matrix_t *m2, matrix_t *result) {
         return 0;
     }
 
-    if(m2->columns == m1->rows){
-        matrix_allocate(result, m2->rows, m1->columns);
-
-        for(int i = 0; i < result->rows; i++){
-            for(int j = 0; j < result->columns; j++){
-                int t = 0;
-                for(int k = 0; k < m2->columns; k++){
-                    t += (m2->content[i][k] * m1->content[k][j]);
-                }
-                result->content[i][j] = t;
-            }
-        }
-
-        return 0;
-    }
-
     return -1;
 }
 
@@ -173,20 +157,76 @@ int matrix_dump_file(matrix_t *m, char *output_file) {
 }
 
 int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
-    // FILE *fp = NULL;
-    // fp = fopen(input_file,"r");    
-    // fgets("");
+    FILE *fp;
+    int ch;
 
-    return -ENOSYS;
-}
+    int numRow = 0; /*calculate number of rows exactly */
+    int numColBuffer = 0; /* a temp value in order to get final true column number*/
+    int numCol = 0; /*calculate number of cols */
 
-// displaying a matrix on the standard output
-void print_matrix(matrix_t m){
-    for(int i=0; i<m.rows; i++){
-        for(int j=0; j<m.columns; j++){
-            printf("%d ",m.content[i][j]);
-        }
-        printf("\n");
+    int statusSpace = 1; /*check if pointer changes betweeen number and whitespace*/   
+    int lastChar = 1; /* pointer2 */
+    int statusLine = 2; /*check if pointer meets line termination*/
+
+    fp = fopen(input_file,"r");    
+
+    if(fp == NULL){
+        return -1;
     }
-}
 
+    while ((ch = fgetc(fp)) != EOF){
+        // at the end of each line
+        if ((ch == '\n')){
+            numRow++;   // number of rows increases
+            statusLine = 1;
+        }else{
+            statusLine = 0;
+        }
+        
+        // check if pointer meets with whitespace
+        if(ch == ' '){
+            statusSpace = 1;
+        }else{
+            statusSpace = 0;
+        }
+
+    // ----------------------------------------------------------
+        // calculate how many elements rech row has 
+        if(statusLine == 0){ 
+            if(lastChar != statusSpace){   
+                if(statusSpace == 0){
+                    numColBuffer++;
+                }
+            }
+        }
+
+        if(statusLine == 1){
+            statusSpace = 1;
+            if(numColBuffer == 0){    // if meets empty row, 
+                numRow -=1;
+            }else if(numRow == 1){    //  assign true value of columns
+                numCol = numColBuffer;
+            }
+            else if(numCol != numColBuffer){    // check if it is a Illegal matrix
+                printf("Illegal matrix");
+                return -2;
+            }
+
+            numColBuffer = 0;
+        }
+
+       lastChar = statusSpace;
+    }
+
+    matrix_allocate(m,numRow,numCol);
+    rewind(fp);
+    int x;
+    for(int i = 0; i < m->rows; i++){
+        for(int j = 0; j < m->columns; j++){
+            fscanf(fp,"%d", &x);
+            m->content[i][j] = x;
+        }
+    }
+
+    fclose(fp);
+}
