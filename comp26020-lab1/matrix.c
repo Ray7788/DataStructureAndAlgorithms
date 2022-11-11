@@ -225,6 +225,28 @@ int matrix_allocate_and_init_file(matrix_t *m, char *input_file) {
        lastChar = statusSpace;  // reset pointers to the same status 
     }
 
+     // situation: single line in a txt file or empty line
+    if(statusLine == 0){ // hasn't change line
+        if(numRow == 0){    // first line hasn't meet "\n"
+            numCol = numColBuffer;
+            if (numCol != 0){
+                numRow++;
+            }
+            
+        }else if(numCol != numColBuffer && numColBuffer != 0){
+            return -1;
+        }else if(numColBuffer != 0){
+            numRow++;
+        }
+
+    }
+
+    // When input Empty Matrix
+    if(numCol ==0 || numRow ==0){
+        printf("Invalid matrix\n");
+        return -1;
+    }
+    
     matrix_allocate(m,numRow,numCol);
     rewind(fp); // reset the pointer
     int tempValue;
