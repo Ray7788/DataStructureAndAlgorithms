@@ -23,7 +23,12 @@ public class darray implements set<String> {
     
     public boolean find(String value) {
         if (mode == SearchModes.LINEAR_SEARCH) {
-            // TODO implemented linear search through list
+	    for(int i=0;i<list.size();i++){
+		if(value.equals(list.get(i))){
+		    return true;
+		}
+	    }
+	    return false;
         } else { //Binary Search
             if (! sorted) {
                 if (verbose > 0) {
@@ -37,11 +42,27 @@ public class darray implements set<String> {
                 
                 sorted = true;
             }
-            // TODO implement binary search through list
-        }
+	    int first = 0;
+	    int last = list.size() - 1;
+	    int middle = (first+last)/2;
+
+	    while(first <= last){
+		int search = list.get(middle).compareTo(value);
+		if(search < 0){
+		    first = middle+1;
+		}
+		else if(search == 0){
+		    return true;
+		}
+		else{
+		    last = middle - 1;
+		}
+		middle = (first + last)/2;
+	    }
+	}
 	return false;
     }
-
+    
     public void print_set ()
     {
 	System.out.print("DArray:\n");
@@ -56,6 +77,7 @@ public class darray implements set<String> {
     }
 
 
+
     // Sorting Methods
 
     public enum SearchModes   { LINEAR_SEARCH,  // =0 in mode flag 
@@ -64,7 +86,6 @@ public class darray implements set<String> {
 				BINARY_SEARCH_THREE, // =3
 				BINARY_SEARCH_FOUR, // = 4
 				BINARY_SEARCH_FIVE; // =5
-
 
 	public static SearchModes getSearchMode(int i) {
 	    switch (i) {
@@ -83,9 +104,7 @@ public class darray implements set<String> {
 		
 	    }
 	}
-
-				
-    };
+ };
 
     private void sort(SearchModes select){
 
@@ -105,7 +124,6 @@ public class darray implements set<String> {
 
 
     // You may find this helpful
-    // It swaps the element at index a and the element at index b in list
     private void swap(int a, int b)
     {
         String temp = list.get(a);
@@ -115,14 +133,53 @@ public class darray implements set<String> {
 
 
     private void insertion_sort(){
-	System.err.format("Not implemented\n");
-	System.exit(-1);
+        int n = list.size();
+        int i, j;
+        String key;
+        for (i = 1; i < n; i++)
+        {
+	    key = list.get(i);
+            j = i-1;
+            while (j >= 0 && list.get(j).compareTo(key)>0)
+                {
+		    list.set(j+1, list.get(j));
+                    j = j-1;
+                }
+	    list.set(j+1, key);
+        }
+
     }
 
-    // Hint: you probably want to define a help function for the recursive call
-    private void quick_sort() {
-	System.err.format("Not implemented\n");
-	System.exit(-1);
+
+    private void quick_sort_recursive(int start, int end) {
+        if (start >= end)
+                return;
+        String mid = list.get(end);
+        int left = start, right = end - 1;
+        while (left < right) {
+	    while (list.get(left).compareTo(mid) < 0 && left < right)
+                        left++;
+	    while (list.get(right).compareTo(mid) >= 0 && left < right)
+                        right--;
+            swap(left, right);
+        }
+        if (list.get(left).compareTo(list.get(end)) >=0)
+	    swap(left, end);
+        else
+            left++;
+	
+        if (left != 0)
+            quick_sort_recursive(start, left - 1);
+        quick_sort_recursive(left + 1, end);
     }
+
+    private void quick_sort() {
+
+	quick_sort_recursive(0, list.size() - 1);
+    }
+
+    private void bucket_sort() { System.exit(-1);}
+    private void merge_sort() { System.exit(-1); }
+
 
 }
