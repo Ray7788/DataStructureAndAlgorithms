@@ -10,7 +10,7 @@ class bstree:
         
     def size(self):
         if self.value is not None:
-            # Check whether the left node and right node are none
+            # Check if the left node and right node are none and calculate the sum
             if (self.left is not None) and (self.right is not None):
                 return 1 + self.left.size() + self.right.size()
             elif (self.left is not None) and (self.right is None):
@@ -23,8 +23,7 @@ class bstree:
             return 0
         
     def tree(self):
-        # This counts as a tree if it has a field self.value
-        # it should also have sub-trees self.left and self.right
+        # This counts as a tree if it has a field self.value, it also include sub-trees self.left and self.right
         return hasattr(self, 'value') and hasattr(self, 'left') and hasattr(self, 'right')
         
     def insert(self, value):
@@ -76,8 +75,6 @@ class bstree:
             # if the root node is None, return False 
             return False
         
-
-        
     # You can update this if you want
     def print_set_recursive(self, depth):
         if depth == 0:
@@ -113,6 +110,6 @@ class bstree:
     def print_stats(self):
         # record and print statistic
         print("Size of the tree : " + str (self.size()))
-        # print("Height of the tree : " + str (self.height()))
+        print("Height of the tree : " + str (self.height()))
             
             
