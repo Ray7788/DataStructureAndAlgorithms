@@ -7,6 +7,10 @@ class hashset:
         self.verbose = config.verbose
         self.mode = config.mode
         self.hash_table_size = config.init_size
+        self.collision_count = 0 # count number of collisions
+        self.insert_number = 0
+        self.hashtable = [None] * self.hash_table_size
+
                 
     # Helper functions for finding prime numbers
     def isPrime(self, n):
@@ -21,9 +25,18 @@ class hashset:
         while (not self.isPrime(n)):
             n = n + 1
         return n
+
+    # Functions for rehashing the hash table
+    def rehash(self):
+        self.hash_table_size = self.insert_number * 2
+        new_hash_table = self.hashtable[:]
+        self.hashtable = [None] * self.hash_table_size
+        for i in range(len(new_hash_table)):
+            self.hashtable[i] = new_hash_table[i]
         
     def insert(self, value):
-        # TODO code for inserting into  hash table
+        # code for inserting into  hash table
+
         print("Placeholder")
         
     def find(self, value):
