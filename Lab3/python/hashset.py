@@ -189,8 +189,22 @@ class hashset:
         print("Placeholder")
         
     def print_stats(self):
-        # TODO code for printing statistics
-        print("Placeholder")
+        if self.verbose == 0:
+            return
+        elif self.verbose == 1:
+            print("The number of collision: " + str(self.collision_count))
+        elif self.verbose == 2:
+            print("The number of collision: " + str(self.collision_count))
+            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
+        elif self.verbose == 3:
+            print("The number of collision: " + str(self.collision_count))
+            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
+            print("The size of the hashtable: " + str(self.hash_table_size))
+        elif self.verbose == 4:
+            print("The number of collision: " + str(self.collision_count))
+            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
+            print("The size of the hashtable: " + str(self.hash_table_size))
+            print("The number of values inserted: " + str(self.insert_number))
         
 # This is a cell structure assuming Open Addressing
 # It should contain and element that is the key and a state which is empty, in_use or deleted
