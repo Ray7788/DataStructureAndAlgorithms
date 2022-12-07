@@ -39,7 +39,7 @@ class hashset:
 
     # Functions for rehashing the hash table
     def rehash(self):
-        self.hash_table_size = self.insert_number * 2   # size of next hash table  
+        self.hash_table_size = self.nextPrime(self.hash_table_size * 2)   # size of next hash table  
         temp_hash_table = self.hashtable
         # initialise new hash table
         self.hashtable = [None] * self.hash_table_size
@@ -50,8 +50,8 @@ class hashset:
         
     def hashFunction(self, value):
         hash_value = 0
-        if self.mode <= 3:
-            cValue = 51 # Prime after 26 Upper case and 26 Lower case 
+        if self.mode < 4:
+            cValue = 31 # Prime after 26 Upper case and 26 Lower case 
             for val in value:
                 hash_value = ord(val) + cValue * hash_value
         else:
@@ -89,21 +89,26 @@ class hashset:
         if (self.insert_number / self.hash_table_size) > self.load_factor:
             self.rehash()
 
+        if value == None:
+            return
+
         hash_value = self.hashFunction(value)
 
         # SEPARATE_CHAINING ---------------------------------------------------------------------------------------------------
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
             pass
         
-        elif self.hashtable[hash_value] == value:   pass    # If the value aready exist, just ignore it
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
-                hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
+                # hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
+                hash_value =  (hash_value + 1) % self.hash_table_size
                 self.collision_count += 1
             if self.hashtable[hash_value] is None:                    # If the slot is empty
                 self.hashtable[hash_value] = value
                 self.insert_number += 1
+            if self.hashtable[hash_value] == value:   
+                pass    # If the value aready exist, just ignore it
 
         # QUADRATIC_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_QUADRATIC_PROBING.value or self.mode == HashingModes.HASH_2_QUADRATIC_PROBING.value:
@@ -135,17 +140,23 @@ class hashset:
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
             pass
 
-        elif self.hashtable[hash_value] is None:   
-            return False
-        elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
-            return True
+        # if self.hashtable[hash_value] is None:   
+        #     return False
+        # elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
+        #     return True
 
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
-                hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
+                # hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
+                hash_value =  (hash_value + 1) % self.hash_table_size
+
                 if hash_value == ini_hash_value:
                     return False
+            if self.hashtable[hash_value] is None:   
+                return False
+            elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
+                return True
 
         # QUADRATIC_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_QUADRATIC_PROBING.value or self.mode == HashingModes.HASH_2_QUADRATIC_PROBING.value:
@@ -155,15 +166,23 @@ class hashset:
                 hash_value = self.openAddressing_QUADRATIC_PROBING(hash_value, i)
                 if hash_value == ini_hash_value:
                     return False
+            if self.hashtable[hash_value] is None:   
+                return False
+            elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
+                return True
 
         # DOUBLE_HASHING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_DOUBLE_HASHING.value or self.mode == HashingModes.HASH_2_DOUBLE_HASHING.value:
             i = 1
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
                 i += 1
-                hash_value = self.openAddressing_DOUBLE_HASHING(22, hash_value, i)
+                hash_value = self.openAddressing_DOUBLE_HASHING(hash_value, i)
                 if hash_value == ini_hash_value:
                    return False
+            if self.hashtable[hash_value] is None:   
+                return False
+            elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
+                return True
 
     def print_set(self):
         # TODO code for printing hash table
