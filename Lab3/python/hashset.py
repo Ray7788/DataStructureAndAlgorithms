@@ -101,7 +101,7 @@ class hashset:
 
         # SEPARATE_CHAINING ---------------------------------------------------------------------------------------------------
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
-            print("d")
+            pass
         
         # elif self.hashtable[hash_value] is None:    pass
         elif self.hashtable[hash_value] == value:   pass    # If the value aready exist, just ignore it
@@ -139,12 +139,12 @@ class hashset:
                 
 
     def find(self, value):
-        hash_value = self.hashFunc(value)
+        hash_value = self.hashFunction(value)
         ini_hash_value = hash_value
 
         # SEPARATE_CHAINING ---------------------------------------------------------------------------------------------------
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
-            print("d")
+            pass
 
         elif self.hashtable[hash_value] is None:   
             return False
