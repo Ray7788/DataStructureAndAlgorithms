@@ -57,7 +57,7 @@ class hashset:
         else:
             # a simple summation
             for val in value:
-                hash_value += ord(val)
+                hash_value = hash_value * 31 + ord(val)
         return hash_value % self.hash_table_size
 
     # Provide smart choices for different mode 
