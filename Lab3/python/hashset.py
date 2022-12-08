@@ -92,8 +92,7 @@ class hashset:
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
-                # hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
-                hash_value =  (hash_value + 1) % self.hash_table_size
+                hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
                 self.collision_count += 1
             if self.hashtable[hash_value] is None:                    # If the slot is empty
                 self.hashtable[hash_value] = value
@@ -111,6 +110,8 @@ class hashset:
             if self.hashtable[hash_value] is None:                    # If the slot is empty
                 self.hashtable[hash_value] = value
                 self.insert_number += 1
+            if self.hashtable[hash_value] == value:   
+                pass    # If the value aready exist, just ignore it
 
         # DOUBLE_HASHING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_DOUBLE_HASHING.value or self.mode == HashingModes.HASH_2_DOUBLE_HASHING.value:
@@ -122,6 +123,8 @@ class hashset:
             if self.hashtable[hash_value] is None:                    # If the slot is empty
                 self.hashtable[hash_value] = value
                 self.insert_number += 1
+            if self.hashtable[hash_value] == value:   
+                pass    # If the value aready exist, just ignore it
 
     def find(self, value):
         hash_value = self.hashFunction(value)
@@ -134,8 +137,7 @@ class hashset:
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
-                # hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
-                hash_value =  (hash_value + 1) % self.hash_table_size
+                hash_value = self.openAddressing_LINEAR_PROBING(hash_value)
 
                 if hash_value == ini_hash_value:
                     return False
@@ -148,8 +150,8 @@ class hashset:
         elif self.mode == HashingModes.HASH_1_QUADRATIC_PROBING.value or self.mode == HashingModes.HASH_2_QUADRATIC_PROBING.value:
             i = 1
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value): 
-                i += 1
                 hash_value = self.openAddressing_QUADRATIC_PROBING(hash_value, i)
+                i += 1
                 if hash_value == ini_hash_value:
                     return False
             if self.hashtable[hash_value] is None:   
@@ -161,8 +163,8 @@ class hashset:
         elif self.mode == HashingModes.HASH_1_DOUBLE_HASHING.value or self.mode == HashingModes.HASH_2_DOUBLE_HASHING.value:
             i = 1
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
-                i += 1
                 hash_value = self.openAddressing_DOUBLE_HASHING(hash_value, i)
+                i += 1
                 if hash_value == ini_hash_value:
                    return False
             if self.hashtable[hash_value] is None:   
