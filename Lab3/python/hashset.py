@@ -74,15 +74,6 @@ class hashset:
         h2 = self.lastPrime(self.hash_table_size) - (hash_value % self.hash_table_size)
         hash_value = (h1 + h2 * i) % self.hash_table_size
         return hash_value
-        
-        #     char_count = 0
-        #     # Both upper and lower case 26 + 26 + 1
-        #     sizeASCII = 53 
-        #     power_ASCII = 0
-        #     for val in value:
-        #         char_count = (char_count + (ord(val) - ord('a') + 1) * power_ASCII) % self.hash_table_size
-        #         power_ASCII = (power_ASCII * sizeASCII) % self.hash_table_size
-        #     return int(char_count)
 
     # code for inserting into hash table
     def insert(self, value):
