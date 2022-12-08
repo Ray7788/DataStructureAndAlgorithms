@@ -71,7 +71,7 @@ class hashset:
 
     def openAddressing_DOUBLE_HASHING(self, hash_value, i):
         h1 = hash_value % self.hash_table_size
-        h2 = hash_value % self.lastPrime(self.hash_table_size)
+        h2 = self.lastPrime(self.hash_table_size) - (hash_value % self.hash_table_size)
         hash_value = (h1 + h2 * i) % self.hash_table_size
         return hash_value
         
