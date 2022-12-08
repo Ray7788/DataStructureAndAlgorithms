@@ -131,11 +131,6 @@ class hashset:
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
             pass
 
-        # if self.hashtable[hash_value] is None:   
-        #     return False
-        # elif self.hashtable[hash_value] == value:       # If the value aready exist, just ignore it
-        #     return True
-
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
             while (self.hashtable[hash_value] is not None) and (self.hashtable[hash_value] != value):
