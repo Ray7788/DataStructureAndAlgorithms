@@ -173,26 +173,37 @@ class hashset:
                 return True
 
     def print_set(self):
-        # TODO code for printing hash table
-        print("Placeholder")
+        # Print the set if choose the separate chaining
+        if self.mode == 3 or self.mode == 7:
+            pass
+            # for i in range(len(self.hashtable_linked)):
+            #     if self.hashtable_linked[i] is not None:
+            #         print(" " + self.hashtable_linked[i].__repr__())
+        # Open method manner for printing
+        else:
+            print("Hashset is: ")
+            for i in range(len(self.hashtable)):
+                if self.hashtable[i] is not None:
+                    print(" " + self.hashtable[i])
+        
         
     def print_stats(self):
         if self.verbose == 0:
             return
         elif self.verbose == 1:
-            print("The number of collision: " + str(self.collision_count))
+            print("The number of collision is: " + str(self.collision_count))
         elif self.verbose == 2:
-            print("The number of collision: " + str(self.collision_count))
-            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
+            print("The number of collision is: " + str(self.collision_count))
+            print("The average number of collision per insert is: " + str(self.collision_count / self.insert_number))
         elif self.verbose == 3:
-            print("The number of collision: " + str(self.collision_count))
-            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
-            print("The size of the hashtable: " + str(self.hash_table_size))
+            print("The number of collision is: " + str(self.collision_count))
+            print("The average number of collision per insert is: " + str(self.collision_count / self.insert_number))
+            print("The size of the hashtable is: " + str(self.hash_table_size))
         elif self.verbose == 4:
-            print("The number of collision: " + str(self.collision_count))
-            print("The average number of collision per insert: " + str(self.collision_count / self.insert_number))
-            print("The size of the hashtable: " + str(self.hash_table_size))
-            print("The number of values inserted: " + str(self.insert_number))
+            print("The number of collision is: " + str(self.collision_count))
+            print("The average number of collision per insert is: " + str(self.collision_count / self.insert_number))
+            print("The size of the hashtable is: " + str(self.hash_table_size))
+            print("The number of values inserted is: " + str(self.insert_number))
         
 # This is a cell structure assuming Open Addressing
 # It should contain and element that is the key and a state which is empty, in_use or deleted
