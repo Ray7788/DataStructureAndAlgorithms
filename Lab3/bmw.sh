@@ -37,8 +37,8 @@ do
 
 for COUNT in 1 2 3 4 5
 do
-
-    ALL_TIME=`(time -p python3 ./python/speller_darray.py -d ./test_data/test_dict/dict_${SIZE}_${STATE}_$COUNT -s ${SIZE} -m 0 ./test_data/test_query/query_${SIZE}_${STATE}_$COUNT) 2>&1 | grep -E "user|sys" | sed s/[a-z]//g`
+    # python3 speller hashset.py -d /usr/share/dict/words -s 1000003 -m 2 -v sample-file
+    ALL_TIME=`(time -p python3 ./python/speller_darray.py -d ./test_data/test_dict/dict_${SIZE}_${STATE}_$COUNT -s ${SIZE} -m 0 ./test_data/test_query/query_${SIZE}_${STATE}_$COUNT) 2>&2 | grep -E "user|sys" | sed s/[a-z]//g`
 
     RUNTIME=`echo ${ALL_TIME[1]} + ${ALL_TIME[2]} | bc`
     COLL=`echo ${ALL_TIME[O]}`
