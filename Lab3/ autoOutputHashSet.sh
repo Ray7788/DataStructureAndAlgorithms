@@ -20,14 +20,14 @@ do
     # Debugging statement to check program calls working as expected
     # python3 ../../search_and_sort_lab/python/speller_darray.py -d ../dictionaries_and_queries/dict_${SIZE}_${STATE}_$COUNT -m 1 -s ${SIZE} ../dictionaries_and_queries/query_${SIZE}_${STATE}_$COUNT
 
-    ALL_TIME=`(time -p python3 ./python/speller_darray.py -d ./test_data/test_dict/dict_${SIZE}_${STATE}_$COUNT -s ${SIZE} -m 0 ./test_data/test_query/query_${SIZE}_${STATE}_$COUNT) 2>&1 | grep -E "user|sys" | sed s/[a-z]//g`
+    ALL_TIME=`(time -p python3 ./python/speller_hashset.py -d ./test_data/test_dict/dict_${SIZE}_${STATE}_$COUNT -s ${SIZE} -m 0 ./test_data/test_query/query_${SIZE}_${STATE}_$COUNT) 2>&1 | grep -E "user|sys" | sed s/[a-z]//g`
     
     RUNTIME=0
     for i in $ALL_TIME;
     do RUNTIME=`echo $RUNTIME + $i|bc`;
     done
-    echo $SIZE $RUNTIME >> data_output/${STATE}_data_output_python.dat
-    echo $SIZE, $RUNTIME >> data_output/${STATE}_data_output_python.csv
+    echo $SIZE $RUNTIME >> data_output/hashset_output/${STATE}_hashset_data_output_python.dat
+    echo $SIZE, $RUNTIME >> data_output/hashset_output/${STATE}_hashset_data_output_python.csv
     
 done
 
