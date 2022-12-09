@@ -7,6 +7,11 @@ class bstree:
         self.right = None
         self.value = ""
         self.height = 0
+
+        self.count_comp_insert = 1 # Count the comparisons number  when inserting
+        self.count_comp_find = 0 # Count the comparisons number when finding
+        self.find_recure = 0 # Count recursive calling times of find function
+        self.count_find = self.count_comp_find - self.find_recure # The actual number 
         
     def size(self):
         if self.value is not None:
@@ -20,7 +25,7 @@ class bstree:
             elif (self.left is None) and (self.right is None):
                 return 1
         else:
-            return 0
+            pass
         
     def tree(self):
         # This counts as a tree if it has a field self.value, it also include sub-trees self.left and self.right
@@ -108,8 +113,16 @@ class bstree:
         self.print_set_recursive(0)
         
     def print_stats(self):
-        # record and print statistic
-        print("Size of the tree : " + str (self.size()))
-        print("Height of the tree : " + str (self.height()))
-            
+        if self.verbose == 0:
+            return
+        elif self.verbose == 1:
+            print("The height of the tree is : " + str(self.height))
+        elif self.verbose == 2:
+            print("The height of the tree is : " + str(self.height))
+            print("The average number of comparisons per insert is : " + str(self.count_comp_insert / self.size()))
+        elif self.verbose == 3:
+            print("The height of the tree is : " + str(self.height))
+            # print("The average number of comparisons per insert is : " + str(self.count_comp_insert / self.size()))
+            # print("The average number of comparisons per find is : " + str(self.count_comp_find / self.count_find))
+        
             
