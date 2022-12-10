@@ -11,10 +11,9 @@ class hashset:
         self.collision_count = 0 # count number of collisions
         self.insert_number = 0 # count the current inserted values numbers
 
-        # for i in range(self.hash_table_size):
-        #     self.hashtable = [cell()] * self.hash_table_size
         self.hashtable = [None] * self.hash_table_size
         self.load_factor = 0.45
+        self.linked_hash_table = [SeparateChaining() for x in range(self.hash_table_size)]
 
                 
     # Helper functions for finding prime numbers
@@ -45,19 +44,25 @@ class hashset:
         self.hashtable = [None] * self.hash_table_size
         self.insert_number = 0
         self.collision_count = 0
+        # store them in the new double sized array
         for i in range(len(temp_hash_table)):
             self.insert(temp_hash_table[i])
         
     def hashFunction(self, value):
         hash_value = 0
         if self.mode < 4:
-            cValue = 31 # Prime after 26 Upper case and 26 Lower case 
+            # BKDR
+            seed = 53 # Prime after 26 Upper case and 26 Lower case 
             for val in value:
-                hash_value = ord(val) + cValue * hash_value
+                hash_value = ord(val) + seed * hash_value
         else:
-            # a simple summation
+            # ELF
             for val in value:
-                hash_value = hash_value * 31 + ord(val)
+                hash_value = (hash_value << 4) + ord(val)
+                x = hash_value & 0xF0000000
+                if (x != 0):
+                    hash_value ^= (x >> 24)
+                hash_value &= ~x
         return hash_value % self.hash_table_size
 
     # Provide smart choices for different mode 
@@ -70,6 +75,7 @@ class hashset:
         return (hash_value + (i**2)) % self.hash_table_size
 
     def openAddressing_DOUBLE_HASHING(self, hash_value, i):
+        # use two variables
         h1 = hash_value % self.hash_table_size
         h2 = self.lastPrime(self.hash_table_size) - (hash_value % self.hash_table_size)
         hash_value = (h1 + h2 * i) % self.hash_table_size
@@ -87,7 +93,13 @@ class hashset:
 
         # SEPARATE_CHAINING ---------------------------------------------------------------------------------------------------
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
-            pass
+            # If the value has been found in the linked list, then just return
+            if self.find(value):
+                return
+            # else append the value
+            else:
+                self.linked_hash_table[hash_value].append(value)
+                self.insert_number += 1
         
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
@@ -132,7 +144,7 @@ class hashset:
 
         # SEPARATE_CHAINING ---------------------------------------------------------------------------------------------------
         if self.mode == HashingModes.HASH_1_SEPARATE_CHAINING.value or self.mode == HashingModes.HASH_2_SEPARATE_CHAINING.value:
-            pass
+            return self.linked_hash_table[hash_value].find(value)
 
         # LINEAR_PROBING ------------------------------------------------------------------------------------------------------
         elif self.mode == HashingModes.HASH_1_LINEAR_PROBING.value or self.mode == HashingModes.HASH_2_LINEAR_PROBING.value:
@@ -176,9 +188,9 @@ class hashset:
         # Print the set if choose the separate chaining
         if self.mode == 3 or self.mode == 7:
             pass
-            # for i in range(len(self.hashtable_linked)):
-            #     if self.hashtable_linked[i] is not None:
-            #         print(" " + self.hashtable_linked[i].__repr__())
+            for i in range(len(self.linked_hash_table)):
+                if self.linked_hash_table[i] is not None:
+                    print(" " + self.linked_hash_table[i].__repr__())
         # Open method manner for printing
         else:
             print("Hashset is: ")
@@ -231,6 +243,64 @@ class state(Enum):
     in_use = 1
     deleted = 2
         
+# An extra class used to implement separate chaining
+class SeparateChaining:
+    class Node:
+        def __init__(self, item):
+            self.item = item
+            self.next = None
+
+        def __str__(self):
+            return str(self.item)
+
+    # The iterable linked list class
+    class LinkedListGenerator:
+        def __init__(self, node):
+            self.node = node
+
+        def __next__(self):
+            if self.node:
+                current_node = self.node
+                self.node = current_node.next
+                return current_node.item
+            else:
+                raise StopIteration
+
+        def __iter__(self):
+            return self
+
+    def __init__(self, iterable=None):
+        self.head = None
+        self.tail = None
+        if iterable:
+            self.extend(iterable)
+
+    # Append node
+    def append(self, obje):
+        node = SeparateChaining.Node(obje)
+        if not self.head:
+            self.head = node
+            self.tail = node
+        else:
+            self.tail.next = node
+            self.tail = node
+
+    # Find node
+    def find(self, obje):
+        for n in self:
+            if n == obje:
+                return True
+        else:
+            return False
+
+    # Iterator the linked list
+    def __iter__(self):
+        return self.LinkedListGenerator(self.head)
+
+    # print the link list
+    def __repr__(self):
+        return '<<' + ','.join(map(str, self)) + '>>'
+
 # Hashing Modes
 class HashingModes(Enum):
     HASH_1_LINEAR_PROBING=0
