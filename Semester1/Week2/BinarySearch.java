@@ -1,5 +1,6 @@
 package Semester1.Week2;
 
+// 复杂度O(logn)
 public class BinarySearch {
     public Object search(int[] A, int target){
         int left = 1;
