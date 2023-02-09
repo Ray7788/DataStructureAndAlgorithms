@@ -166,34 +166,36 @@ class bnb(knapsack):
         self.frac_bound(solution, solution.fixed)
         
         current_best = solution.val
-        upper_bound = solution.bound
         
         self.insert(solution)
         
-        while (self.QueueSize > 0) and (upper_bound > current_best):
+        while (self.QueueSize != 0) or (solution.bound > current_best):
+            # remove the first item in the queue
             head = self.removeMax()
             if head.fixed >= self.Nitems:
                 break
 
-            head_1 = head.copy()
-            head_1.fixed += 1
-            head_1.solution_vec[head_1.fixed] = True
+            # construct two children
+            head1 = head.copy()
+            head1.fixed += 1
+            head1.solution_vec[head1.fixed] = True
 
-            head_0 = head.copy()
-            head_0.fixed += 1
-            head_0.solution_vec[head_0.fixed] = False
+            head0 = head.copy()
+            head0.fixed += 1
+            head0.solution_vec[head0.fixed] = False
 
             children = []
-            children.append(head_1)
-            children.append(head_0)
+            children.append(head1)
+            children.append(head0)
             
-            for temp_head in children:
-                if temp_head.val >= 0:
-                    self.frac_bound(temp_head, temp_head.fixed)
-                    if temp_head.val > current_best:
-                        current_best = temp_head.val
-                        self.copy_array(temp_head.solution_vec, final_sol)
-                    self.insert(temp_head)
+            for child in children:
+                self.frac_bound(child, child.fixed)
+                if child.val >= 0:
+                    if child.val > current_best:
+                        current_best = child.val
+                        self.copy_array(child.solution_vec, final_sol)
+                    # add child to the queue
+                    self.insert(child)
         
     def copy_array(self, array_from, array_to):
         # This copies Nitems elements of one boolean array to another
