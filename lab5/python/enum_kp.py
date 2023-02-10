@@ -24,7 +24,7 @@ class enum_knapsack(knapsack):
             j = j + 1.0
 
             if j % 20000 == 0:
-                self.print_bar(self.Nitems)
+                self.print_bar(j)
 
             if (not self.QUIET):
                 print("done %g of the full enumeration" % (j/math.pow(2, self.Nitems)))
@@ -63,8 +63,8 @@ class enum_knapsack(knapsack):
             
     def print_bar(self, j):
         print("\r", end="")
-        print("Percentage: {}%".format(int(j/math.pow(2, self.Nitems) * 100)), "▓" * (int(j/math.pow(2, self.Nitems) * 100)// 2), end="")
-        
+        percentage = int((j/math.pow(2, self.Nitems)) * 100)
+        print("Progress: {}".format("▋" * (percentage // 2)), end="")
 
 knapsk = enum_knapsack(sys.argv[1])
 knapsk.print_instance()
