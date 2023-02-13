@@ -12,12 +12,8 @@ for COUNT in 1 2 3 4 5
 do
 
 # number of items you want to put in the knapsack ｜ capacity of the knapsack ｜ upper bound on the profit and weight of each item ｜ name of the output file
-    python3 kp_generate.py 5 ${CAPACITY} ${BOUND} ./python/data3b/${CAPACITY}_${BOUND}.txt 
-    start=$(date +%N)
-    python3 ./python/dp_kp.py ./data/data3b/${CAPACITY}_${BOUND}.txt 
-    end=$(date +%N)
-    run_time=$(echo "$end - $start" | bc)
-    echo $run_time >> run_time.log
+    python3 kp_generate.py 5 ${CAPACITY} ${BOUND} ./data/data3b/${CAPACITY}_${BOUND}.txt 
+    time (python3 ./python/dp_kp.py ./data/data3b/${CAPACITY}_${BOUND}.txt) 2>&1 | awk '/total/ {print strftime("%Y-%m-%d %H:%M:%S"), $1}' >> time.csv
 
 done 
 
