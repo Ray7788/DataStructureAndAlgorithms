@@ -1,6 +1,8 @@
 CAPACITYS="10000 20000 30000 40000 50000 60000 70000 80000 90000 100000 110000 120000 130000 140000 150000 160000 170000 180000 190000 200000"
 
 ## initialise a folder which saves raw txt file
+mkdir ./data/data3b/
+mkdir ./data/time3b/
 mkdir ./data/data3b/capacity
 mkdir ./data/time3b/capacity
 ## clear and initialise csv and dat
@@ -34,7 +36,7 @@ do
 done
 
 
-# This script is written by Rui Xu, Feb 2023.
+
 # Two main functions: 
 # 1.Use kp_generate.py to generate source data by a different capacity for dp_kp.py 
 # 2. record and save the execution time 
