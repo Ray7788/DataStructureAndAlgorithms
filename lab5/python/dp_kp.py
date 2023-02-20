@@ -62,5 +62,5 @@ class dp(knapsack):
         
 knapsk = dp(sys.argv[1])
 solution = [False]*(knapsk.Nitems + 1)
-knapsk.DP(solution);
+knapsk.DP(solution)
 knapsk.check_evaluate_and_print_sol(solution)
