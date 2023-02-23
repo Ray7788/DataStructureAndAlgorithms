@@ -64,7 +64,9 @@ class enum_knapsack(knapsack):
     def print_bar(self, j):
         print("\r", end="")
         percentage = int((j/math.pow(2, self.Nitems)) * 100)
-        print("Progress: {}".format("▋" * (percentage // 2)), end="")
+        if percentage == 99:
+            percentage += 1
+        print("Progress: {}%".format(percentage), "▋" * (percentage // 2), end="")
 
 knapsk = enum_knapsack(sys.argv[1])
 knapsk.print_instance()
